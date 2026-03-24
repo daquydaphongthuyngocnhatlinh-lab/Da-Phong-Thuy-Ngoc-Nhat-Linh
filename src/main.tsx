@@ -8,11 +8,15 @@ import { CartProvider } from './Context/CartContext';
 import { supabase } from './service/supabaseClient';
 
 // Connect to React DevTools when in development
+// This will only work if react-devtools is running locally
 if (import.meta.env.DEV) {
-  const script = document.createElement('script');
-  script.src = 'http://localhost:8097';
-  script.async = true;
-  document.body.appendChild(script);
+  setTimeout(() => {
+    const script = document.createElement('script');
+    script.src = 'http://localhost:8097';
+    script.async = true;
+    script.onerror = () => console.log('React DevTools not available. Run: react-devtools');
+    document.body.appendChild(script);
+  }, 1000);
 }
 
 window.onerror = (message, source, lineno, colno, error) => {
