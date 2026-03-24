@@ -7,6 +7,14 @@ import { WishlistProvider } from './Context/WishlistContext';
 import { CartProvider } from './Context/CartContext';
 import { supabase } from './service/supabaseClient';
 
+// Connect to React DevTools when in development
+if (import.meta.env.DEV) {
+  const script = document.createElement('script');
+  script.src = 'http://localhost:8097';
+  script.async = true;
+  document.body.appendChild(script);
+}
+
 window.onerror = (message, source, lineno, colno, error) => {
   console.error('Global error:', { message, source, lineno, colno, error });
   return false;
