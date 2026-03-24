@@ -1,6 +1,5 @@
 import {StrictMode} from 'react';
 import {createRoot, hydrateRoot} from 'react-dom/client';
-import { Suspense } from 'react';
 import App from './App.tsx';
 import './index.css';
 import { WishlistProvider } from './Context/WishlistContext';
@@ -47,9 +46,7 @@ if (isDev) {
     <StrictMode>
       <WishlistProvider>
         <CartProvider>
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen bg-white">Đang tải...</div>}>
-            <App />
-          </Suspense>
+          <App />
         </CartProvider>
       </WishlistProvider>
     </StrictMode>
@@ -59,9 +56,7 @@ if (isDev) {
   hydrateRoot(rootElement,
     <WishlistProvider>
       <CartProvider>
-        <Suspense fallback={<div className="flex items-center justify-center min-h-screen bg-white">Đang tải...</div>}>
-          <App />
-        </Suspense>
+        <App />
       </CartProvider>
     </WishlistProvider>
   );
