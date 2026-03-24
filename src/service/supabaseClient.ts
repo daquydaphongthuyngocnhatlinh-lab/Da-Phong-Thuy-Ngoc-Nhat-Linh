@@ -1,9 +1,9 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-let supabaseClient: ReturnType<typeof createClient> | null = null;
+let supabaseClient: SupabaseClient | null = null;
 
 if (!supabaseUrl || !supabaseAnonKey || !supabaseUrl.startsWith('http')) {
   console.warn('Supabase credentials missing/invalid. Using mock client. Check .env.local / Vercel dashboard.');
@@ -16,22 +16,26 @@ if (!supabaseUrl || !supabaseAnonKey || !supabaseUrl.startsWith('http')) {
   }
 }
 
-export const supabase = {
-  ...(supabaseClient || {}),
-  // Graceful fallbacks for common ops
-  from: (table: string) => ({
+const mockSupabase = {
+  from: () => ({
     select: async () => ({ data: [], error: { message: 'Supabase unavailable' }, count: 0 }),
     insert: async () => ({ data: [], error: { message: 'Supabase unavailable' } }),
     update: async () => ({ data: [], error: { message: 'Supabase unavailable' } }),
+    delete: async () => ({ data: [], error: { message: 'Supabase unavailable' } }),
     storage: {
       from: () => ({
         getPublicUrl: () => ({ data: { publicUrl: '' } }),
       }),
     },
-  } as any),
-  
-  isReady: () => !!supabaseClient,
-  
-  getError: () => !supabaseClient ? 'Supabase not configured' : undefined,
+  }),
+  isReady: () => false,
+  getError: () => 'Supabase not configured',
 };
+
+const enhancedSupabase = (supabaseClient ?? mockSupabase) as any;
+
+enhancedSupabase.isReady = () => !!supabaseClient;
+enhancedSupabase.getError = () => (!supabaseClient ? 'Supabase not configured' : undefined);
+
+export const supabase = enhancedSupabase;
 
