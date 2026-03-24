@@ -4,6 +4,8 @@ import { motion } from 'motion/react';
 import { ArrowRight, Star, ShieldCheck, Truck, MessageCircle } from 'lucide-react';
 import { supabase } from '../service/supabaseClient';
 
+const heroImage = '/buddha-hero.jpg';
+
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,9 +55,9 @@ export default function Home() {
               </div>
             ) : (
               <img 
-src="/buddha-hero.jpg"
-alt="Buddha Hero - Ngọc Nhất Linh" 
-                className="w-full h-full object-cover brightness-50" // Reduced from 0.4
+                src={heroImage}
+                alt="Buddha Hero - Ngọc Nhất Linh"
+                className="w-full h-full object-cover brightness-50"
                 referrerPolicy="no-referrer"
                 onError={() => setHeroError(true)}
               />
